@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TL-Store</title>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/base.css}"/>
+    <link rel="stylesheet" th:href="@{/css/header.css}"/>
+    <link rel="stylesheet" th:href="@{/css/profile.css}"/>
+</head>
+<body>
+<div th:replace="~{components/header :: header}"></div>
+<div class="container my-5" style="height: 450px">
+    <div class="row">
+        <div class="col-3 sidebar">
+            <h3 class="fs-4 fw-italic px-2">Cập nhật thông tin</h3>
+            <a href="#" class="nav-link-profile" data-target="personal-info">Thông tin cá nhân</a>
+            <a href="#" class="nav-link-profile" data-target="address">Địa chỉ</a>
+        </div>
+        <div class="col-9 main-content">
+            <div id="personal-info" class="content-section">
+                <h4>Thông tin cá nhân</h4>
+                <form  th:action="@{/updateProfile}" method="post">
+                    <div class="mb-3 row">
+                        <div class="col-6">
+                            <label for="lastName" class="form-label">Họ</label>
+                            <input th:value="${lastName}" name="lastName" type="text" class="form-control" id="lastName" placeholder="Nhập họ" th:placeholder="${lastName} ? '' : 'Nhập họ'" required>
+                        </div>
+                        <div class="col-6">
+                            <label for="firstName" class="form-label">Tên</label>
+                            <input th:value="${firstName}" name="firstName" type="text" class="form-control" id="firstName" placeholder="Nhập họ" th:placeholder="${firstName} ? '' : 'Nhập tên'" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Số điện thoại</label>
+                        <input th:value="${phone}" name="phone" type="text" class="form-control" id="phone" th:placeholder="${phone} ? '' : 'Nhập số điện thoại'" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email (Đăng nhập)</label>
+                        <input th:value="${email}" type="text" name="email" class="form-control" id="email" readonly>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <span th:if="${param.successprofile}" class="text-success p-2 m-2">Cập nhật thành công!</span>
+<!--                    errorprofile-->
+                    <span th:if="${param.errorprofile}" class="text-danger p-2 m-2">Cập nhật thất bại!</span>
+
+                </form>
+            </div>
+            <div id="address" class="content-section">
+                <h4>Địa chỉ</h4>
+                <form th:action="@{/updateAddress}" method="post">
+                    <div class="mb-3">
+                        <label for="province" class="form-label">Tỉnh/ Thành phố</label>
+                        <input th:value="${province}" name="province" type="text" class="form-control" id="province"  th:placeholder="${province} ? '' : 'Nhập tỉnh/ thành phố'" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="district" class="form-label">Quận/ Huyện</label>
+                        <input th:value="${district}" name="district" type="text" class="form-control" id="district" th:placeholder="${district} ? '' : 'Nhập quận/ huyện'" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ward" class="form-label">Tên đường</label>
+                        <input th:value="${ward}" name="ward" type="text" class="form-control" id="ward" th:placeholder="${ward} ? '' : 'Nhập tên đường'" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="address_detail" class="form-label">Địa chỉ cụ thể</label>
+                        <input th:value="${address_detail}" name="address_detail" type="text" class="form-control" id="address_detail" th:placeholder="${address_detail} ? '' : 'Nhập địa chỉ cụ thể'" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <span th:if="${param.successaddress}" class="text-success p-2 m-2">Cập nhật thành công!</span>
+                    <span th:if="${param.erroraddress}" class="text-danger p-2 m-2">Cập nhật thất bại!</span>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{components/footer :: footer}"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>
+    document
+    document.addEventListener('DOMContentLoaded', function() {
+        const links = document.querySelectorAll('.nav-link-profile');
+        const sections = document.querySelectorAll('.content-section');
+        links.forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                const target = link.getAttribute('data-target');
+                sections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                document.getElementById(target).style.display = 'block';
+            });
+        });
+        document.getElementById('personal-info').style.display = 'block';
+    });
+</script>
+</body>
+</html>

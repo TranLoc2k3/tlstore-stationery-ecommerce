@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>TL-Store</title>
+
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/base.css}"/>
+    <link rel="stylesheet" th:href="@{/css/header.css}"/>
+</head>
+<body>
+<div th:replace="~{components/header :: header}"></div>
+<div th:replace="~{components/carousel :: carousel}"></div>
+
+<!--Danh muc san pham-->
+<div class="container h-100 w-100 my-4">
+    <div class="row">
+        <div class="col-6 col-lg-3 px-0 py-2">
+            <div class="card m-2">
+                <div class="card-header  d-flex justify-content-between border-0">
+                    <a class="fw-bold" style="color: #000000" th:href="@{/sach}">Sách đọc</a>
+                    <a th:href="@{/sach}"> <i class="fa fa-arrow-right"></i></a>
+                </div>
+                <div class="card-body p-1 mx-auto">
+                    <a th:href="@{/sach}">
+                        <img alt="sach-giao-khoa-image" class="card-img-top"
+                             th:src="@{/images/sach-giao-khoa-image.webp}">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3 px-0 py-2">
+            <div class="card m-2">
+                <div class="card-header  d-flex justify-content-between border-0">
+                    <a class="fw-bold" th:href="@{/dungcuhoctap}" style="color: #000000">Dụng cụ học tập</a>
+                    <a th:href="@{/dungcuhoctap}"> <i aria-hidden="true" class="fa fa-arrow-right"></i></a>
+                </div>
+                <div class="card-body p-1 mx-auto">
+                    <a th:href="@{/dungcuhoctap}">
+                        <img alt="dung-cu-hoc-tap-image" class="card-img-top"
+                             th:src="@{/images/dung-cu-hoc-tap-image.webp}">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3 px-0 py-2">
+            <div class="card m-2">
+                <div class="card-header  d-flex justify-content-between border-0">
+                    <a class="fw-bold" th:href="@{/tapvo}" style="color: #000000">Tập vở</a>
+                    <a th:href="@{/tapvo}"> <i aria-hidden="true" class="fa fa-arrow-right"></i></a>
+                </div>
+                <div class="card-body p-1 mx-auto">
+                    <a href="/tapvo">
+                        <img alt="van-phong-pham-image" class="card-img-top" th:src="@{/images/van-phong-pham.webp}">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3 px-0 py-2">
+            <div class="card m-2">
+                <div class="card-header  d-flex justify-content-between border-0">
+                    <a class="fw-bold" th:href="@{/quatang}" style="color: #000000">Quà tặng</a>
+                    <a th:href="@{/quatang}"> <i aria-hidden="true" class="fa fa-arrow-right"></i></a>
+                </div>
+                <div class="card-body p-1 mx-auto">
+                    <a href="/quatang">
+                        <img alt="qua-tang-image" class="card-img-top" th:src="@{/images/qua-tang.webp}">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Danh sách Sách phổ biến-->
+<div class="d-flex flex-column align-items-center carousel slide py-4 my-4" data-bs-ride="carousel"
+     id="carouselExampleControls"
+     style="background-color: #ded59e"
+>
+    <p class="fw-bolder fs-3" style="color: #000">
+        <a th:href="@{/sach}"> <i>Danh sách Sách nổi bật</i></a>
+    </p>
+    <div class="carousel-inner">
+        <div class="carousel-item"
+             th:classappend="${iterStat.index == 0} ? 'active'"
+             th:each="product, iterStat: ${danhSachSach}"
+             th:if="${iterStat.index % 6 == 0}">
+            <div class="row mx-auto" style="max-width: 80%">
+                <div class="col-6 col-md-4 col-lg-2 px-0 py-2" th:each="i : ${#numbers.sequence(0, 5)}">
+                    <a style="text-decoration: none; color: inherit;"
+                       th:href="@{/products(id=${danhSachSach[iterStat.index + i].id})}">
+                        <div class="card m-2">
+                            <div class="card-header d-flex justify-content-between border-0 mb-2"
+                                 style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <span class="fw-bold" style="color: #000000"
+                                              th:text="${danhSachSach[iterStat.index + i].name}">Tên sản phẩm</span>
+                            </div>
+                            <div class="card-body p-1 mx-auto">
+                                <img alt="anh-sach" class="card-img-top" style="max-width: 16rem"
+                                     th:src="${danhSachSach[iterStat.index + i].image}">
+                            </div>
+                            <div class="card-footer">
+                                <p th:text="${danhSachSach[iterStat.index + i].price} + ' VND'">Giá sản phẩm<i>VND</i></p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" data-bs-slide="pre v" data-bs-target="#carouselExampleControls" type="button">
+        <span aria-hidden="true" class="carousel-control-prev-icon" style="filter: invert(100%);"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" data-bs-slide="next" data-bs-target="#carouselExampleControls" type="button">
+        <span aria-hidden="true" class="carousel-control-next-icon" style="filter: invert(100%);"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+    <a th:href="@{/sach}">
+        <button class="btn btn-light" type="button">Xem thêm</button>
+    </a>
+</div>
+
+<!--Danh sách Tập vở phổ biến-->
+<div class="d-flex flex-column align-items-center carousel slide py-4 my-4" data-bs-ride="carousel"
+     id="carouselExampleControls2"
+     style="background-color: #ded59e"
+>
+    <p class="fw-bolder fs-3" style="color: #000">
+        <i>Tập vở</i>
+    </p>
+    <div class="carousel-inner">
+        <div class="carousel-item"
+             th:classappend="${iterStat.index == 0} ? 'active'"
+             th:each="product, iterStat: ${danhSachTapVo}"
+             th:if="${iterStat.index % 6 == 0}">
+            <div class="row mx-auto" style="max-width: 80%">
+                <div class="col-6 col-md-4 col-lg-2 px-0 py-2" th:each="i : ${#numbers.sequence(0, 5)}">
+                    <a style="text-decoration: none; color: inherit;"
+                       th:href="@{/products(id=${danhSachTapVo[iterStat.index + i].id})}">
+                        <div class="card m-2">
+                            <div class="card-header d-flex justify-content-between border-0 mb-2"
+                                 style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <span class="fw-bold" style="color: #000000"
+                                              th:text="${danhSachTapVo[iterStat.index + i].name}">Tên sản phẩm</span>
+                            </div>
+                            <div class="card-body p-1 mx-auto">
+                                <img alt="anh-sach" class="card-img-top" style="max-width: 16rem"
+                                     th:src="${danhSachTapVo[iterStat.index + i].image}">
+                            </div>
+                            <div class="card-footer">
+                                <p th:text="${danhSachTapVo[iterStat.index + i].price} + ' VND'">Giá sản phẩm<i>VND</i></p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" data-bs-slide="pre v" data-bs-target="#carouselExampleControls2"
+            type="button">
+        <span aria-hidden="true" class="carousel-control-prev-icon" style="filter: invert(100%);"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" data-bs-slide="next" data-bs-target="#carouselExampleControls2" type="button">
+        <span aria-hidden="true" class="carousel-control-next-icon" style="filter: invert(100%);"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+    <a th:href="@{/}">
+        <button class="btn btn-light" type="button">Xem thêm</button>
+    </a>
+</div>
+
+<!--Danh sách Dụng cụ học tập phổ biến-->
+<div class="d-flex flex-column align-items-center carousel slide py-4 my-4" data-bs-ride="carousel"
+     id="carouselExampleControls3"
+     style="background-color: #ded59e"
+>
+    <p class="fw-bolder fs-3" style="color: #000">
+        <i>Dụng cụ học tập</i>
+    </p>
+    <div class="carousel-inner">
+        <div class="carousel-item"
+             th:classappend="${iterStat.index == 0} ? 'active'"
+             th:each="product, iterStat: ${danhSachDungCuHocTap}"
+             th:if="${iterStat.index % 6 == 0}">
+            <div class="row mx-auto" style="max-width: 80%">
+                <div class="col-6 col-md-4 col-lg-2 px-0 py-2" th:each="i : ${#numbers.sequence(0, 5)}">
+                    <a style="text-decoration: none; color: inherit;"
+                       th:href="@{/products(id=${danhSachDungCuHocTap[iterStat.index + i].id})}">
+                        <div class="card m-2">
+                            <div class="card-header d-flex justify-content-between border-0 mb-2"
+                                 style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <span class="fw-bold" style="color: #000000"
+                                              th:text="${danhSachDungCuHocTap[iterStat.index + i].name}">Tên sản phẩm</span>
+                            </div>
+                            <div class="card-body p-1 mx-auto">
+                                <img alt="anh-sach" class="card-img-top" style="max-width: 16rem"
+                                     th:src="${danhSachDungCuHocTap[iterStat.index + i].image}">
+                            </div>
+                            <div class="card-footer">
+                                <p th:text="${danhSachDungCuHocTap[iterStat.index + i].price} + ' VND'">Giá sản phẩm<i>VND</i></p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" data-bs-slide="pre v" data-bs-target="#carouselExampleControls3"
+            type="button">
+        <span aria-hidden="true" class="carousel-control-prev-icon" style="filter: invert(100%);"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" data-bs-slide="next" data-bs-target="#carouselExampleControls3" type="button">
+        <span aria-hidden="true" class="carousel-control-next-icon" style="filter: invert(100%);"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+    <a th:href="@{/}">
+        <button class="btn btn-light" type="button">Xem thêm</button>
+    </a>
+</div>
+
+<!--Danh sách Quà tặng phổ biến-->
+<div class="d-flex flex-column align-items-center carousel slide py-4 my-4" data-bs-ride="carousel"
+     id="carouselExampleControls4"
+     style="background-color: #ded59e"
+>
+    <p class="fw-bolder fs-3" style="color: #000">
+        <i>Quà tặng</i>
+    </p>
+    <div class="carousel-inner">
+        <div class="carousel-item"
+             th:classappend="${iterStat.index == 0} ? 'active'"
+             th:each="product, iterStat: ${danhSachQuaTang}"
+             th:if="${iterStat.index % 6 == 0}">
+            <div class="row mx-auto" style="max-width: 80%">
+                <div class="col-6 col-md-4 col-lg-2 px-0 py-2" th:each="i : ${#numbers.sequence(0, 5)}">
+                    <a style="text-decoration: none; color: inherit;"
+                       th:href="@{/products(id=${danhSachQuaTang[iterStat.index + i].id})}">
+                        <div class="card m-2">
+                            <div class="card-header d-flex justify-content-between border-0 mb-2"
+                                 style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <span class="fw-bold" style="color: #000000"
+                                              th:text="${danhSachQuaTang[iterStat.index + i].name}">Tên sản phẩm</span>
+                            </div>
+                            <div class="card-body p-1 mx-auto">
+                                <img alt="anh-sach" class="card-img-top" style="max-width: 16rem"
+                                     th:src="${danhSachQuaTang[iterStat.index + i].image}">
+                            </div>
+                            <div class="card-footer">
+                                <p th:text="${danhSachQuaTang[iterStat.index + i].price} + ' VND'">Giá sản phẩm<i>VND</i></p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" data-bs-slide="pre v" data-bs-target="#carouselExampleControls4"
+            type="button">
+        <span aria-hidden="true" class="carousel-control-prev-icon" style="filter: invert(100%);"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" data-bs-slide="next" data-bs-target="#carouselExampleControls4" type="button">
+        <span aria-hidden="true" class="carousel-control-next-icon" style="filter: invert(100%);"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+    <a th:href="@{/}">
+        <button class="btn btn-light" type="button">Xem thêm</button>
+    </a>
+</div>
+
+<div th:replace="~{components/footer :: footer}"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

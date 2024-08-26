@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>TL-Store</title>
+
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/base.css}"/>
+    <link rel="stylesheet" th:href="@{/css/header.css}"/>
+    <link rel="stylesheet" th:href="@{/css/order.css}"/>
+
+</head>
+<body>
+<div th:replace="~{components/header :: header}"></div>
+<div class="container my-5" style="height: 500px">
+    <div class="row">
+        <div class="col-3 sidebar">
+            <h3 class="fs-4 fw-italic px-2">Thông tin đơn hàng</h3>
+            <a href="#" class="nav-link-order p-2 my-4" data-target="pending-orders">Đang xử lý</a>
+            <a href="#" class="nav-link-order p-2 my-4" data-target="shipping-orders">Đang vận chuyển</a>
+            <a href="#" class="nav-link-order p-2 my-4" data-target="delivered-orders">Hoàn thành</a>
+            <a href="#" class="nav-link-order p-2 my-4" data-target="cancelled-orders">Hủy</a>
+        </div>
+        <div class="col-9 main-content">
+            <div id="pending-orders" class="content-section">
+                <h3 class="fs-4 fw-italic px-2">Đơn hàng đang xử lý</h3>
+                <table class="table table-hover p-4 my-4">
+                    <thead>
+                    <tr>
+                        <th scope="col">STT</th>
+                        <th scope="col">Thông tin đơn hàng</th>
+                        <th scope="col">Thành tiền</th>
+                        <th scope="col">Thời gian đặt hàng</th>
+                        <th scope="col">Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="order, iStat: ${pending_orders}">
+                            <th scope="row" th:text="${iStat.index+1}">STT</th>
+                            <td>
+                                <a th:href="@{/orderDetail(id=${order.id})}" class="text-primary">Xem thông tin chi tiết</a>
+                            </td>
+                            <td>
+                                <span th:text="${order.totalPrice}"></span>
+                                <i>VND</i>
+                            </td>
+                            <td>
+                                <p th:text="${#temporals.format(order.date, 'HH:mm dd-MM-yyyy')}"></p>
+                            </td>
+                            <td>
+                                <a class="btn btn-danger" th:attr="onclick='updateOrderStatus(' + ${order.id} + ', \'cancelled\')'"> Hủy đơn hàng</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="shipping-orders" class="content-section">
+                <h3 class="fs-4 fw-italic px-2">Đơn hàng đang vận chuyển</h3>
+                <table class="table table-hover p-4 my-4">
+                    <thead>
+                    <tr>
+                        <th scope="col">STT</th>
+                        <th scope="col">Thông tin đơn hàng</th>
+                        <th scope="col">Thành tiền</th>
+                        <th scope="col">Thời gian đặt hàng</th>
+                        <th scope="col">Đã nhận hàng</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="order, iStat: ${shipping_orders}">
+                        <th scope="row" th:text="${iStat.index+1}">STT</th>
+                        <td>
+                            <a th:href="@{/orderDetail(id=${order.id})}" class="text-primary">Xem thông tin chi tiết</a>
+                        </td>
+                        <td>
+                            <span th:text="${order.totalPrice}"></span>
+                            <i>VND</i>
+                        </td>
+                        <td>
+                            <p th:text="${#temporals.format(order.date, 'HH:mm dd-MM-yyyy')}"></p>
+                        <td>
+<!--                        <a class="btn btn-danger" th:attr="onclick='updateOrderStatus(' + ${order.id} + ', \'cancelled\')'"> Hủy đơn hàng</a>-->
+<!--                            <a class="btn btn-success">Xác nhận</a>-->
+                            <a class="btn btn-success" th:attr="onclick='updateOrderStatus(' + ${order.id} + ', \'delivered\')'">Xác nhận</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="delivered-orders" class="content-section">
+                <h3 class="fs-4 fw-italic px-2">Đơn hàng đã nhận</h3>
+                <table class="table table-hover p-4 my-4">
+                    <thead>
+                    <tr>
+                        <th scope="col">STT</th>
+                        <th scope="col">Thông tin đơn hàng</th>
+                        <th scope="col">Thành tiền</th>
+                        <th scope="col">Thời gian đặt hàng</th>
+                        <th scope="col">Thời gian nhận hàng</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="order, iStat: ${delivered_orders}">
+                        <th scope="row" th:text="${iStat.index+1}">STT</th>
+                        <td>
+                            <a th:href="@{/orderDetail(id=${order.id})}" class="text-primary">Xem thông tin chi tiết</a>
+                        </td>
+                        <td>
+                            <span th:text="${order.totalPrice}"></span>
+                            <i>VND</i>
+                        </td>
+                        <td>
+                            <p th:text="${#temporals.format(order.date, 'HH:mm dd-MM-yyyy')}"></p>
+                        </td>
+                        <td>
+                            <p th:text="${#temporals.format(order.lastUpdate, 'HH:mm dd-MM-yyyy')}"></p>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="cancelled-orders" class="content-section">
+                <h3 class="fs-4 fw-italic px-2">Đơn hàng đã hủy</h3>
+                <table class="table table-hover p-4 my-4">
+                    <thead>
+                    <tr>
+                        <th scope="col">STT</th>
+                        <th scope="col">Thông tin đơn hàng</th>
+                        <th scope="col">Thành tiền</th>
+                        <th scope="col">Thời gian đặt hàng</th>
+                        <th scope="col">Thời gian hủy</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="order, iStat: ${cancelled_orders}">
+                        <th scope="row" th:text="${iStat.index+1}">STT</th>
+                        <td>
+                            <a th:href="@{/orderDetail(id=${order.id})}" class="text-primary">Xem thông tin chi tiết</a>
+                        </td>
+                        <td>
+                            <span th:text="${order.totalPrice}"></span>
+                            <i>VND</i>
+                        </td>
+                        <td>
+                            <p th:text="${#temporals.format(order.date, 'HH:mm dd-MM-yyyy')}"></p>
+                        </td>
+                        <td>
+                            <p th:text="${#temporals.format(order.lastUpdate, 'HH:mm dd-MM-yyyy')}"></p>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{components/footer :: footer}"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script th:src="@{/js/order.js}"></script>
+</body>
+</html>
+
